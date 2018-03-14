@@ -15,7 +15,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -99,3 +98,26 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Rope project settings
+.ropeproject
+.DS_Store
+
+#
+# Custom added gitignore
+#
+
+# Mac
+.idea/
+
+# SQLite db
+db.sqlite3
+
+# Secret keys
+*.yml
+run_dev.sh
+
+# All migration directories
+security/migrations
+core/migrations
+
