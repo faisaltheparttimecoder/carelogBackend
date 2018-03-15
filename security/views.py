@@ -33,6 +33,7 @@ def new_rss_feed(request):
                 'message': 'success'
             })
         except Exception as e:
+            logging.info("Post Request Error: Cancelling the request")
             return JsonResponse({
                 'id': 000,
                 'message': str(e)

@@ -11,4 +11,7 @@ urlpatterns = [
 
     # All the URL from the Security app
     url(r'^', include('security.urls')),
+
+    # All the URL from the Product app
+    url(r'^', include('product.urls')),
 ]

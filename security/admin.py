@@ -7,7 +7,7 @@ class RssFeedAdmin(admin.ModelAdmin):
     """
     Override the default Django Admin website display of rssfeed app
     """
-    list_display = ["feedname", "feedurl"]
+    list_display = ["name", "url"]
 
     class Meta:
         model = rssfeed
