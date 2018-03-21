@@ -123,3 +123,5 @@ core/migrations
 products/migrations
 links/migrations
 
+
+.DS_Store
