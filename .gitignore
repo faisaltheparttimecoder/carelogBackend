@@ -120,6 +120,6 @@ run_dev.sh
 # All migration directories
 security/migrations
 core/migrations
-product/migrations
+products/migrations
 links/migrations
 
