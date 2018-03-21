@@ -1,5 +1,5 @@
 from django.contrib import admin
-from security.models import rssfeed
+from security.models import RssFeed
 
 
 # Overriding the Django Default views.
@@ -10,8 +10,8 @@ class RssFeedAdmin(admin.ModelAdmin):
     list_display = ["name", "url"]
 
     class Meta:
-        model = rssfeed
+        model = RssFeed
 
 
 # Register all the tables on the Django website display
-admin.site.register(rssfeed, RssFeedAdmin)
+admin.site.register(RssFeed, RssFeedAdmin)

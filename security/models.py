@@ -1,13 +1,16 @@
 from django.db import models
 
 
-class rssfeed(models.Model):
+class RssFeed(models.Model):
     """
     Table: rssfeed
     Comment: The place to store all the rss feeder URL
     """
-    name = models.CharField(max_length=2000, null=False, unique=True)
-    url = models.CharField(max_length=200, null=False)
+    name = models.CharField(max_length=100, null=False, unique=True)
+    url = models.URLField(max_length=500, null=False)
 
-    def __unicode__(self):
+    class Meta:
+        ordering = ('name',)
+
+    def __str__(self):
         return self.name

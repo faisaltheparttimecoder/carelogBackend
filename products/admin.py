@@ -1,5 +1,5 @@
 from django.contrib import admin
-from product.models import product
+from products.models import Product
 
 
 # Overriding the Django Default views.
@@ -10,8 +10,8 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ["name", "slug", "url"]
 
     class Meta:
-        model = product
+        model = Product
 
 
 # Register all the tables on the Django website display
-admin.site.register(product, ProductAdmin)
+admin.site.register(Product, ProductAdmin)

@@ -1,45 +1,83 @@
-import logging
-from django.http import JsonResponse, HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from security.lib.db import add_new_rss_feed_source
-from security.lib.feeder import Feeder
+import feedparser
+from security.models import RssFeed
+from security.serializers import RssFeedSerializer
+from django.http import Http404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
-logger = logging.getLogger('carelog')
 
-
-def security(request, rssItem):
+class RssFeedList(APIView):
     """
-    Main function that sends all the RSS feeds...
+    List all rssfeed, or create a new rssfeed.
     """
-    logging.info("Request received to provide the RSS Feed")
-    return JsonResponse(Feeder().rss_feeder(rssItem))
+    def get(self, request, format=None):
+        """
+        The default get method, i.e on page load
+        """
+        rssfeed = RssFeed.objects.all()
+        serializer = RssFeedSerializer(rssfeed, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        """
+        The default post method.
+        """
+        serializer = RssFeedSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
-def new_rss_feed(request):
+class RssFeedDetails(APIView):
     """
-    When called it adds in the new RSS Feed source
+    Retrieve, update or delete a rssfeed instance.
     """
-    logging.info("Request received to add source of a new RSS Feed")
-    if request.method == "POST":
+
+    def get_feedcontent(self, url):
+        """
+        Get Rss content of the selected item
+        """
         try:
-            logging.info("Post Request: Committing the data to the database")
-            new_rss_feed_data = dict(request.POST)
-            feedname = new_rss_feed_data['feedname'][0]
-            feedurl = new_rss_feed_data['feedurl'][0]
-            saved_id = add_new_rss_feed_source(feedname, feedurl)
-            return JsonResponse({
-                'id': saved_id,
-                'message': 'success'
-            })
+            return feedparser.parse(url)['entries']
         except Exception as e:
-            logging.info("Post Request Error: Cancelling the request")
-            return JsonResponse({
-                'id': 000,
-                'message': str(e)
-            })
-    else:
-        logging.info("Get Request: Sending failure message")
-        return HttpResponse('failure')
+            return []
 
+    def get_object(self, pk):
+        """
+        Get the perticular row from the table.
+        """
+        try:
+            return RssFeed.objects.get(pk=pk)
+        except RssFeed.DoesNotExist:
+            raise Http404
 
+    def get(self, request, pk, format=None):
+        """
+        We are going to add the RSS feed content along with this pull request
+        """
+        rssfeed = self.get_object(pk)
+        serializer = RssFeedSerializer(rssfeed)
+        data = serializer.data
+        data['content'] = self.get_feedcontent(serializer.data['url'])
+        return Response(data)
+
+    def put(self, request, pk, format=None):
+        """
+        When requested update the corresponding entry of the table
+        """
+        rssfeed = self.get_object(pk)
+        serializer = RssFeedSerializer(rssfeed, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        """
+        When requested delete the corresponding entry of the table
+        """
+        rssfeed = self.get_object(pk)
+        rssfeed.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

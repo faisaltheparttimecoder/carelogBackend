@@ -1,17 +1,19 @@
 from django.contrib import admin
+from django.urls import path
 from django.conf.urls import url, include
+
 
 urlpatterns = [
 
-    # Admin Site
-    url(r'^admin/', admin.site.urls),
+    # The main admin page
+    path('admin/', admin.site.urls),
 
-    # All the URL from the Core app
-    url(r'^', include('core.urls')),
-
-    # All the URL from the Security app
+    # All the security page URL
     url(r'^', include('security.urls')),
 
-    # All the URL from the Product app
-    url(r'^', include('product.urls')),
+    # All product page URL
+    url(r'^', include('products.urls')),
+
+    # All links page URL
+    url(r'^', include('links.urls')),
 ]

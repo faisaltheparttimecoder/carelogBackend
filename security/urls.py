@@ -1,15 +1,14 @@
 from django.conf.urls import url
-from . import views
+from rest_framework.urlpatterns import format_suffix_patterns
+from security import views
 
 urlpatterns = [
 
-    # Security URL..
-    url(r'^security/$', views.security, name="security"),
+    # Api URL, for the main security page
+    url(r'^api/security/$', views.RssFeedList.as_view()),
 
-    # Security URL with args..
-    url(r'^security/(?P<rssItem>\d+)/$', views.security, name="securityWithOptions"),
-
-    # New source of RSS Feed
-    url(r'^security/post/$', views.new_rss_feed, name="new_rss_feed"),
-
+    # Api URL, for the security page for a particular ID.
+    url(r'^api/security/(?P<pk>[0-9]+)/$', views.RssFeedDetails.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
