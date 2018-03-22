@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'security.apps.SecurityConfig',
     'products.apps.ProductsConfig',
     'links.apps.LinksConfig',
+    'zendesk.apps.ZendeskConfig'
+
 ]
 
 MIDDLEWARE = [

@@ -16,4 +16,7 @@ urlpatterns = [
 
     # All links page URL
     url(r'^', include('links.urls')),
+
+    # All zendesk page URL
+    url(r'^', include('zendesk.urls')),
 ]

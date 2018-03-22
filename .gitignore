@@ -14,7 +14,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -109,6 +108,7 @@ venv.bak/
 
 # Mac
 .idea/
+.DS_Store
 
 # SQLite db
 db.sqlite3
@@ -122,6 +122,6 @@ security/migrations
 core/migrations
 products/migrations
 links/migrations
+zendesk/migrations
 
 
-.DS_Store
