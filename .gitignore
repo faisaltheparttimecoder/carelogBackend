@@ -123,5 +123,6 @@ core/migrations
 products/migrations
 links/migrations
 zendesk/migrations
+timeline/migrations
 
 

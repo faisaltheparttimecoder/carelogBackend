@@ -29,3 +29,6 @@ class HotTicketsSerializer(serializers.ModelSerializer):
     class Meta:
         model = HotTicket
         fields = ('id', 'ticket_id', 'org_id', 'hot')
+
+
+

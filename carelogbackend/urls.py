@@ -19,4 +19,7 @@ urlpatterns = [
 
     # All zendesk page URL
     url(r'^', include('zendesk.urls')),
+
+    # All timeline page URL
+    url(r'^', include('timeline.urls')),
 ]

@@ -25,11 +25,11 @@ class HotTicket(models.Model):
     Comment: The place to store all the Hot Tickets
     """
     ticket_id = models.BigIntegerField(null=False, unique=True)
-    org_id = models.BigIntegerField(null=False, db_index=True)
+    org_id = models.ForeignKey(Organisation, related_name='hot_ticket_org', on_delete=models.CASCADE)
     hot = models.BooleanField()
 
     def __str__(self):
-        return self.ticket_id
+        return str(self.ticket_id)
 
 
 class TicketNote(models.Model):
@@ -38,7 +38,7 @@ class TicketNote(models.Model):
     Comment: The place to store all the ticketNotes
     """
     ticket_id = models.BigIntegerField(null=False, db_index=True)
-    org_id = models.BigIntegerField(null=False, db_index=True)
+    org_id = models.ForeignKey(Organisation, related_name='org', on_delete=models.CASCADE)
     author = models.CharField(max_length=30, null=False, default="Unknown")
     created = models.DateTimeField(auto_now=True, null=False)
     notes = models.CharField(max_length=300)

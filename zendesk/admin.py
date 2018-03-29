@@ -17,7 +17,7 @@ class HotTicketAdmin(admin.ModelAdmin):
     """
     Override the default Django Admin website display of Ticket Notes app
     """
-    list_display = ["ticket_id", "org_id", "hot"]
+    list_display = ["ticket_id", "hot"]
 
     class Meta:
         model = HotTicket
@@ -27,7 +27,7 @@ class TicketNoteAdmin(admin.ModelAdmin):
     """
     Override the default Django Admin website display of Ticket Notes app
     """
-    list_display = ["ticket_id",  "org_id", "created", "notes"]
+    list_display = ["ticket_id", "created", "notes"]
 
     class Meta:
         model = TicketNote
