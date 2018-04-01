@@ -9,6 +9,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # All the security page URL
+    url(r'^', include('core.urls')),
+
+    # All the security page URL
     url(r'^', include('security.urls')),
 
     # All product page URL

@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,6 +43,7 @@ INSTALLED_APPS = [
     'django_filters',
 
     # Carelog APP
+    'core.apps.CoreConfig',
     'security.apps.SecurityConfig',
     'products.apps.ProductsConfig',
     'links.apps.LinksConfig',
