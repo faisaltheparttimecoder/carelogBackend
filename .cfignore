@@ -5,6 +5,7 @@ venv/
 core/migrations
 links/migrations
 products/migrations
+security/migrations
 tasks/migrations
 timeline/migrations
 zendesk/migrations
