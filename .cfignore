@@ -1,0 +1,10 @@
+db.sqlite3
+venv/
+
+# All migration directories
+core/migrations
+links/migrations
+products/migrations
+tasks/migrations
+timeline/migrations
+zendesk/migrations

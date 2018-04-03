@@ -116,6 +116,7 @@ db.sqlite3
 # Secret keys
 *.yml
 run_dev.sh
+manifest.yml
 
 # All migration directories
 security/migrations
@@ -124,5 +125,6 @@ products/migrations
 links/migrations
 zendesk/migrations
 timeline/migrations
+tasks/migrations
 
 

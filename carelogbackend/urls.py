@@ -8,7 +8,10 @@ urlpatterns = [
     # The main admin page
     path('admin/', admin.site.urls),
 
-    # All the security page URL
+    # Social Authentication URL
+    url(r'^auth/', include('rest_framework_social_oauth2.urls')),
+
+    # All the core page URL
     url(r'^', include('core.urls')),
 
     # All the security page URL

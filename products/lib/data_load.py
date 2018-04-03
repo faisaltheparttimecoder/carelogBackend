@@ -18,7 +18,7 @@ class LoadProducts:
         """
         piv_product = data['name']
         piv_slug = data['slug']
-        exists = Product.objects.filter(name=data)
+        exists = Product.objects.filter(name=piv_product)
         if exists:
             Product.objects.filter(Q(name=piv_product) | Q(slug=piv_slug)).update(
                 name=piv_product,

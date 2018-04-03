@@ -1,7 +1,8 @@
 import requests, json, os
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse, HttpResponse
-from django.contrib.auth.models import User
+from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 @csrf_exempt
@@ -25,4 +26,32 @@ def Login(request):
                   data=data, headers={
             'content-type': 'application/x-www-form-urlencoded'
         })
-    return JsonResponse(response.json())
+    return JsonResponse(generate_access_token(response.json()))
+
+
+@csrf_exempt
+def generate_access_token(responseJson):
+    """
+    Generate the token of the authorized user
+    """
+    access_token = responseJson['access_token']
+    data = {
+        'grant_type': 'convert_token',
+        'client_id': os.environ['SOCIAL_AUTH_KEY'],
+        'client_secret': os.environ['SOCIAL_AUTH_SECRET'],
+        'backend': os.environ['SOCIAL_AUTH_BACKEND'],
+        'token': access_token
+    }
+    response = requests.post(os.environ['BASE_URL'] + 'auth/convert-token', data=data)
+    return response.json()
+
+
+class loggedUser(APIView):
+    """
+    Get the logged in users full name
+    """
+    def get(self, request, format=None):
+        """
+        The default get method, i.e on page load
+        """
+        return Response(request.user.get_full_name())
