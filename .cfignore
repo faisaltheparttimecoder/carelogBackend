@@ -1,6 +1,9 @@
 db.sqlite3
 venv/
 
+# core files
+carelogbackend/static
+
 # All migration directories
 core/migrations
 links/migrations

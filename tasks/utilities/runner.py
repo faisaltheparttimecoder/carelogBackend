@@ -1,6 +1,7 @@
 import datetime, os
 from django.contrib.auth.models import User
 from products.lib.data_load import LoadProducts
+from tasks.engine.maintenance import Maintenance
 from tasks.models import LastRun
 
 
@@ -15,6 +16,7 @@ class TaskRunner:
         self.admin_pass = os.environ['ADMIN_PASS']
         self.when_to_run = {
             'refresh_pivotal_products_table': 3600,     # Every Hour
+            'table_maintenance': 86400,  # Once a day
         }
 
     def update_last_run_time(self, component):
@@ -58,9 +60,18 @@ class TaskRunner:
             LoadProducts().load_data_to_db()
             self.update_last_run_time('refresh_pivotal_products_table')
 
+    def run_check_for_table_maintenance(self):
+        """
+        Run the component to do table maintainence ...
+        """
+        if self.when_to_run['table_maintenance'] < self.check_last_run_table('table_maintenance'):
+            Maintenance().run_table_maintenance()
+            self.update_last_run_time('table_maintenance')
+
     def run_task(self):
         """
         Execute all the tasks ...
         """
         self.create_super_user()
         self.run_refresh_pivotal_products_table()
+        self.run_check_for_table_maintenance()

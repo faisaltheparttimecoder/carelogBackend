@@ -119,6 +119,7 @@ run_dev.sh
 manifest.yml
 
 # All migration directories
+carelogbackend/static
 security/migrations
 core/migrations
 products/migrations

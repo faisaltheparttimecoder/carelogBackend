@@ -99,24 +99,16 @@ WSGI_APPLICATION = 'carelogbackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-if os.environ['ENVIRONMENT'] == 'prod':
-    DATABASES = {
-        'default': {
-            'NAME': os.environ['MYSQL_DATABASE'],
-            'ENGINE': 'django.db.backends.mysql',
-            'USER': os.environ['MYSQL_USERNAME'],
-            'PASSWORD': os.environ['MYSQL_PASSWORD'],
-            'HOST': os.environ['MYSQL_HOST'],
-            'PORT': os.environ['MYSQL_PORT'],
-        }
+DATABASES = {
+    'default': {
+        'NAME': os.environ['MYSQL_DATABASE'],
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': os.environ['MYSQL_USERNAME'],
+        'PASSWORD': os.environ['MYSQL_PASSWORD'],
+        'HOST': os.environ['MYSQL_HOST'],
+        'PORT': os.environ['MYSQL_PORT'],
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+}
 
 
 REST_FRAMEWORK = {
