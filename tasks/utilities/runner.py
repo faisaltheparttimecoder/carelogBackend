@@ -1,6 +1,7 @@
 import datetime, os
 from django.contrib.auth.models import User
 from products.lib.data_load import LoadProducts
+from zendesk.lib.load_tickets import LoadTickets
 from tasks.engine.maintenance import Maintenance
 from tasks.models import LastRun
 
@@ -17,6 +18,7 @@ class TaskRunner:
         self.when_to_run = {
             'refresh_pivotal_products_table': 3600,     # Every Hour
             'table_maintenance': 86400,  # Once a day
+            'load_ticket_data': 900,    # Every 15 minutes
         }
 
     def update_last_run_time(self, component):
@@ -68,6 +70,14 @@ class TaskRunner:
             Maintenance().run_table_maintenance()
             self.update_last_run_time('table_maintenance')
 
+    def run_load_ticket_table(self):
+        """
+        Run the component to do table maintainence ...
+        """
+        if self.when_to_run['load_ticket_data'] < self.check_last_run_table('load_ticket_data'):
+            LoadTickets().extract_data()
+            self.update_last_run_time('load_ticket_data')
+
     def run_task(self):
         """
         Execute all the tasks ...
@@ -75,3 +85,4 @@ class TaskRunner:
         self.create_super_user()
         self.run_refresh_pivotal_products_table()
         self.run_check_for_table_maintenance()
+        self.run_load_ticket_table()

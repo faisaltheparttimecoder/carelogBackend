@@ -1,4 +1,5 @@
 from django.db import connection, transaction
+from zendesk.models import LastOrgTicketLoaderRun
 import datetime
 
 cursor = connection.cursor()
@@ -44,6 +45,23 @@ class Maintenance:
             'OPTIMIZE TABLE ', 'ANALYZE TABLE ', 'CHECK TABLE ', 'CHECKSUM TABLE '
         ]
 
+        # Delete data from the historical table, if its n days old (one week old)
+        self.n_days = 7
+
+    def date_diff(self):
+        """
+        Provide difference of date based on the number of days required to purge
+        """
+        return datetime.datetime.now() - datetime.timedelta(days=self.n_days)
+
+    def cleanup_older_data(self):
+        """
+        Cleaning up old stale historical data
+        """
+        purge_dates = self.date_diff()
+        print(purge_dates)
+        LastOrgTicketLoaderRun.objects.filter(last__lte=purge_dates).delete()
+
     def execute_command(self, table):
         """
         Execute table maintenance tasks
@@ -57,6 +75,8 @@ class Maintenance:
         """
         Start the table maintenance program ...
         """
+        # Cleanup older data
+        self.cleanup_older_data()
 
         # Maintenance task
         for table in self.table_list:
