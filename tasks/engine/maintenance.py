@@ -38,6 +38,8 @@ class Maintenance:
             'zendesk_hotticket',
             'zendesk_organisation',
             'zendesk_ticketnote',
+            'zendesk_lastorgticketloaderrun',
+            'zendesk_ticket'
         ]
 
         # Keep the space, do not remove
