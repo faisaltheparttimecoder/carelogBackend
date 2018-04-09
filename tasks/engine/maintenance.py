@@ -61,7 +61,6 @@ class Maintenance:
         Cleaning up old stale historical data
         """
         purge_dates = self.date_diff()
-        print(purge_dates)
         LastOrgTicketLoaderRun.objects.filter(last__lte=purge_dates).delete()
 
     def execute_command(self, table):

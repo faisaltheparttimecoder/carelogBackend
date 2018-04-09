@@ -8,7 +8,19 @@ from django.http import Http404
 from common.utilities import get_url
 from zendesk.models import Organisation, TicketNote, HotTicket
 from zendesk.serializers import OrganisationSerializer, TicketNoteSerializer, HotTicketsSerializer
-from zendesk.lib.extract_hot_tickets import extract_hot_ticket
+from zendesk.lib.ticket_extractor import extract_hot_ticket
+from zendesk.lib.map_request import method_mapper
+
+
+class TicketViewSet(APIView):
+    """
+    Custom Serializer for pulling the required data.
+    """
+    def get(self, request, method, format=None):
+        """
+        The default get method, i.e on page load
+        """
+        return Response(method_mapper(method, request))
 
 
 class ZendeskSearch(APIView):
@@ -32,7 +44,7 @@ class ZendeskTicketComments(APIView):
     """
     Custom serializer from Zendesk Ticket Audits
     """
-    def get(self, request, ticket , format=None):
+    def get(self, request, ticket, format=None):
         """
         Send ticket audits based on ticket non
         """

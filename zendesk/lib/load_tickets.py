@@ -183,6 +183,10 @@ class LoadTickets:
             # Buildpack
             elif custom_field['id'] == 31507778 and custom_field['value']:
                 storage['product_component_category'] = custom_field['value']
+            # Services
+            elif custom_field['id'] == 31508128 and custom_field['value']:
+                storage['product_component_category'] = custom_field['value']
+
 
         return storage
 

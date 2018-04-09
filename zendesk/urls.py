@@ -25,6 +25,9 @@ urlpatterns = [
     url(r'^api/customer/hottickets/$', views.HotTicketsList.as_view()),
     url(r'^api/customer/hottickets/(?P<pk>[0-9]+)/$', views.HotTicketDetails.as_view()),
 
+    # Dashboard API
+    url(r'^api/customer/tickets/(?P<method>[\w\-]+)/$', views.TicketViewSet.as_view()),
+
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
