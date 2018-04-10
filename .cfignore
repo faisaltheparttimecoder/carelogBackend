@@ -4,7 +4,7 @@ venv/
 # core files
 carelogbackend/static
 
-# All migration directories
+# Ignore migration folders
 core/migrations
 links/migrations
 products/migrations

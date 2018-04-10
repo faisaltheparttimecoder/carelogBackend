@@ -21,6 +21,7 @@ touch zendesk/migrationstouch/__init__.py
 
 # Setup the dev environment ( fill in the details below )
 {
+    echo 'export ENVIRONMENT=<Prod or Dev>'
     echo 'export BASE_URL=<API URL>'
     echo 'export DJANGO_SECRET_KEY=<DJANGO SECRET KEY>'
     echo 'export PIVNET_BASE_URL=<PIVNET BASE URL>'
@@ -39,6 +40,7 @@ touch zendesk/migrationstouch/__init__.py
     echo 'export SOCIAL_AUTH_KEY=<SOCIAL AUTH KEY>'
     echo 'export SOCIAL_AUTH_SECRET=<SOCIAL AUTH SECRET>'
     echo 'export SOCIAL_AUTH_BACKEND=<SOCIAL AUTH BACKEND>'
+    echo 'export DJANGO_LOG_LEVEL=<INFO OR DEBUG>'
 
 } >> "run_dev.sh"
 

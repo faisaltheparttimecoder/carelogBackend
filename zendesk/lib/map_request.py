@@ -20,7 +20,7 @@ def method_mapper(method, request):
     from_date = url_parameters['fromDate']
     end_date = url_parameters['endDate']
     switcher = {
-        "status_count": extract_status_count_tickets(org_id, from_date, end_date),
+        "status_count": extract_status_count_tickets(org_id),
         "tickets_created_by_month": extract_tickets_created_by_month(org_id),
         "top_creators": extract_top_creators(org_id, from_date, end_date),
         "top_product_components": extract_top_product_components(org_id, from_date, end_date),

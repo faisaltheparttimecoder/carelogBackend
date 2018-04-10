@@ -195,6 +195,9 @@ class LoadTickets:
         Get the username based on the user id
         """
         logger.debug("Extracting the username for the user ID: {0}".format(user_id))
+        if not user_id:
+            logger.debug("User ID is Null, so setting the username as 'Unknown'")
+            return "Unknown"
         user_id = str(user_id)
         if user_id in self.store_username_temp:
             return self.store_username_temp[user_id]

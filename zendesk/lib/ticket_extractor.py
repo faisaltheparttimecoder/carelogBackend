@@ -33,7 +33,7 @@ def extract_hot_ticket(search_string):
     return collector
 
 
-def extract_status_count_tickets(org_id, from_date, end_date):
+def extract_status_count_tickets(org_id):
     sql = """  
     SELECT 
         status, COUNT(*) "total"
@@ -41,8 +41,6 @@ def extract_status_count_tickets(org_id, from_date, end_date):
         zendesk_ticket
     WHERE
         org_id_id = """ + org_id + """
-    AND created >= '""" + from_date + """'
-    AND created <= '""" + end_date + """'
     GROUP BY 1
     ORDER BY 1 
     """
