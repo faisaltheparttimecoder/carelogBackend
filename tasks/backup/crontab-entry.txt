@@ -1,0 +1,4 @@
+# Carelog backup scheduler ( Run daily at 3 AM )
+#
+0 3 * * * /root/carelog-backup/bin/backup.sh >> /root/carelog-backup/log/carelog_backup.log 2>&1
+#

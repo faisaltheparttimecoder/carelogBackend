@@ -32,6 +32,7 @@ class Maintenance:
             'social_auth_partial',
             'social_auth_usersocialauth',
             'tasks_lastrun',
+            'tasks_backuphistory',
             'timeline_timeline',
             'timeline_timelinecategory',
             'timeline_timelinedetail',

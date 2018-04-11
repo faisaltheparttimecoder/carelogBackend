@@ -112,12 +112,13 @@ venv.bak/
 
 # SQLite db
 db.sqlite3
-
+git
 # Secret keys
 *.yml
 run_dev.sh
 manifest.yml
 test.py
+tasks/backup/environment.env
 
 # All migration directories
 carelogbackend/static
