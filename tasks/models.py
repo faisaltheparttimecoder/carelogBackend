@@ -9,7 +9,7 @@ class LastRun(models.Model):
     component = models.CharField(max_length=30)
     last_run = models.DateTimeField(auto_now=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.component
 
 

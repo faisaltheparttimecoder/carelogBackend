@@ -1,9 +1,10 @@
+import copy
 from zendesk.models import HotTicket, Organisation
 from common.utilities import find_between
 from django.db import connection
 
 
-def dictfetchall(cursor):
+def dict_fetch_all(cursor):
     """
     Return all rows from a cursor as a dict
     """
@@ -14,14 +15,60 @@ def dictfetchall(cursor):
     ]
 
 
-def run_query(sql):
+def dict_fetch_all_by_month(cursor):
+    """
+    We need the data in this format
+    data = [
+        Month: "jan", "type1": value , "type2": value,
+        Month: "feb", "type1": value , "type2": value,
+        ......
+    ]
+    do the below code helps to build the dictionary on that method
+    """
+    collectors = []
+    is_the_data_empty = True
+    cursor_fetch = cursor.fetchall()
+    types = [rows[0] for rows in cursor_fetch]
+
+    # built a template of dictionary
+    for col in cursor.description:
+        temp_collector = {}
+        if col[0] != 'Type':
+            temp_collector['month'] = col[0]
+            for type in types:
+                temp_collector[type] = ''
+            collectors.append(temp_collector)
+
+    # Now populate the row
+    for rows in cursor_fetch:
+        type = None
+        index = 0
+        for row in rows:
+            if index == 0:
+                type = row
+            else:
+                if row > 0:
+                    is_the_data_empty = False
+                collectors[index-1][type] = row
+            index = index + 1
+
+    return [{
+        'collectors': collectors,
+        'is_the_data_empty': is_the_data_empty
+    }]
+
+
+def run_query(sql, by_month=False):
     """
     Run the raw sql and return the result
     """
     cursor = connection.cursor()
     cursor.execute(sql)
     connection.close()
-    return dictfetchall(cursor)
+    if by_month:
+        return dict_fetch_all_by_month(cursor)
+    else:
+        return dict_fetch_all(cursor)
 
 
 def extract_hot_ticket(search_string):
@@ -49,7 +96,7 @@ def extract_status_count_tickets(org_id):
 
 def extract_tickets_created_by_month(org_id):
     sql = """
-    SELECT Year(created) Year
+    SELECT Year(created) Type
       ,ifnull(ROUND(sum(case when month(created) = 1 then 1 end)), 0) Jan
       ,ifnull(ROUND(sum(case when month(created) = 2 then 1 end)), 0) Feb
       ,ifnull(ROUND(sum(case when month(created) = 3 then 1 end)), 0) Mar
@@ -66,9 +113,9 @@ def extract_tickets_created_by_month(org_id):
     WHERE  org_id_id = """ + org_id + """
     AND created >= DATE_SUB(now(), INTERVAL 2 YEAR)
     GROUP BY Year(created)
-    ORDER BY Year
+    ORDER BY 1
     """
-    return run_query(sql)
+    return run_query(sql, True)
 
 
 def extract_top_creators(org_id, from_date, end_date):
@@ -93,7 +140,8 @@ def extract_top_product_components(org_id, from_date, end_date):
     SELECT 
         CASE
           WHEN product_component LIKE 'to_be_filled_%' THEN 'unknown'
-          ELSE product_component
+          WHEN product_component LIKE '%csr%' THEN 'csr'
+          ELSE REPLACE(product_component, '_', ' ')
         END label,
         COUNT(*) total
     FROM
@@ -111,7 +159,7 @@ def extract_top_product_components(org_id, from_date, end_date):
 
 def extract_ticket_created_solved_by_current_year(org_id):
     sql = """
-    SELECT "Created" status
+    SELECT "Created" Type
       ,ifnull(ROUND(sum(case when month(created) = 1 then 1 end)), 0) Jan
       ,ifnull(ROUND(sum(case when month(created) = 2 then 1 end)), 0) Feb
       ,ifnull(ROUND(sum(case when month(created) = 3 then 1 end)), 0) Mar
@@ -128,7 +176,7 @@ def extract_ticket_created_solved_by_current_year(org_id):
     WHERE org_id_id = """ + org_id + """
     AND created >= DATE_FORMAT(NOW() ,'%Y-01-01')
     union
-    SELECT "Closed" status
+    SELECT "Closed" Type
       ,ifnull(ROUND(sum(case when month(updated) = 1 then 1 end)), 0) Jan
       ,ifnull(ROUND(sum(case when month(updated) = 2 then 1 end)), 0) Feb
       ,ifnull(ROUND(sum(case when month(updated) = 3 then 1 end)), 0) Mar
@@ -146,12 +194,12 @@ def extract_ticket_created_solved_by_current_year(org_id):
     AND status in ('closed', 'solved')
     AND updated >= DATE_FORMAT(NOW() ,'%Y-01-01')
     """
-    return run_query(sql)
+    return run_query(sql, True)
 
 
 def extract_priority_tickets_for_year(org_id):
     sql = """
-    SELECT priority
+    SELECT priority "Type"
       ,ifnull(ROUND(sum(case when month(created) = 1 then 1 end)), 0) Jan
       ,ifnull(ROUND(sum(case when month(created) = 2 then 1 end)), 0) Feb
       ,ifnull(ROUND(sum(case when month(created) = 3 then 1 end)), 0) Mar
@@ -169,7 +217,7 @@ def extract_priority_tickets_for_year(org_id):
     AND created >= DATE_FORMAT(NOW() ,'%Y-01-01')
     GROUP BY 1
     """
-    return run_query(sql)
+    return run_query(sql, True)
 
 
 def extract_ticket_by_version(org_id, from_date, end_date):

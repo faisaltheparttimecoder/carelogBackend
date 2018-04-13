@@ -18,6 +18,9 @@ def get_url(url, username=None, password=None):
 
 
 def find_between(s, first, last):
+    """
+    Find between strings from a given string and a start and end string.
+    """
     try:
         start = s.index(first) + len(first)
         end = s.index(last, start)
