@@ -7,6 +7,7 @@ mkdir -p security/migrations
 mkdir -p tasks/migrations
 mkdir -p timeline/migrations
 mkdir -p zendesk/migrations
+mkdir -p environment/migrations
 
 # Create the folder a python executable
 touch core/migrations/__init__.py
@@ -16,6 +17,7 @@ touch security/migrations/__init__.py
 touch tasks/migrations/__init__.py
 touch timeline/migrations/__init__.py
 touch zendesk/migrations/__init__.py
+touch environment/migrations/__init__.py
 
 # Start the API Web Server
 python manage.py makemigrations zendesk
@@ -30,6 +32,8 @@ python manage.py makemigrations products
 python manage.py migrate products
 python manage.py makemigrations links
 python manage.py migrate links
+python manage.py makemigrations environment
+python manage.py migrate environment
 python manage.py makemigrations
 python manage.py migrate
 nohup /bin/sh  tasks/utilities/task.sh &

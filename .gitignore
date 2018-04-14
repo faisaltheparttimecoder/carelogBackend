@@ -119,6 +119,7 @@ run_dev.sh
 manifest.yml
 test.py
 tasks/backup/environment.env
+to-be-installed.txt
 
 # All migration directories
 carelogbackend/static
@@ -129,5 +130,6 @@ links/migrations
 zendesk/migrations
 timeline/migrations
 tasks/migrations
+environment/migrations
 
 

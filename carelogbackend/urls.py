@@ -28,4 +28,7 @@ urlpatterns = [
 
     # All timeline page URL
     url(r'^', include('timeline.urls')),
+
+    # All Enviornment page URL
+    url(r'^', include('environment.urls')),
 ]

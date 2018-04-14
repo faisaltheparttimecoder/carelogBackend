@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'zendesk.apps.ZendeskConfig',
     'timeline.apps.TimelineConfig',
     'tasks.apps.TasksConfig',
+    'environment.apps.EnvironmentConfig',
 
     # Auth apps
     'oauth2_provider',

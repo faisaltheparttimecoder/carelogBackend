@@ -1,5 +1,6 @@
 db.sqlite3
 venv/
+to-be-installed.txt
 
 # core files
 carelogbackend/static
@@ -12,3 +13,5 @@ security/migrations
 tasks/migrations
 timeline/migrations
 zendesk/migrations
+environment/migrations
+
