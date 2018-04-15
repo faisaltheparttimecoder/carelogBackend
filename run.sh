@@ -18,6 +18,7 @@ touch tasks/migrations/__init__.py
 touch timeline/migrations/__init__.py
 touch zendesk/migrations/__init__.py
 touch environment/migrations/__init__.py
+touch team/migrations/__init__.py
 
 # Start the API Web Server
 python manage.py makemigrations zendesk
@@ -34,6 +35,8 @@ python manage.py makemigrations links
 python manage.py migrate links
 python manage.py makemigrations environment
 python manage.py migrate environment
+python manage.py makemigrations team
+python manage.py migrate team
 python manage.py makemigrations
 python manage.py migrate
 nohup /bin/sh  tasks/utilities/task.sh &

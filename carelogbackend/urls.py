@@ -31,4 +31,7 @@ urlpatterns = [
 
     # All Enviornment page URL
     url(r'^', include('environment.urls')),
+
+    # All Team page URL
+    url(r'^', include('team.urls')),
 ]
