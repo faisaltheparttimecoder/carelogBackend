@@ -4,6 +4,9 @@ from zendesk import views
 
 urlpatterns = [
 
+    # Country List URL
+    url(r'^api/customer/country/$', views.CountryViewSet.as_view()),
+
     # Api URL, for the organization search
     url(r'^api/customer/search/(.*)/$', views.ZendeskSearch.as_view()),
 

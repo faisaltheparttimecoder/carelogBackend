@@ -12,6 +12,18 @@ from zendesk.lib.ticket_extractor import extract_hot_ticket
 from zendesk.lib.map_request import method_mapper
 
 
+class CountryViewSet(APIView):
+    """
+    Custom Serializer for pulling the required data.
+    """
+    def get(self, request, format=None):
+        """
+        The default get method, i.e on page load
+        """
+        url = 'https://restcountries.eu/rest/v1/all'
+        return Response(get_url(url))
+
+
 class TicketViewSet(APIView):
     """
     Custom Serializer for pulling the required data.

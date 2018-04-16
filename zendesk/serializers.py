@@ -8,7 +8,11 @@ class OrganisationSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Organisation
-        fields = ('id', 'org_id', 'name', 'created_at', 'location', 'expired_contract', 'recently_added')
+        fields = ('id', 'org_id',
+                  'name', 'created_at',
+                  'location', 'expired_contract',
+                  'recently_added', 'country',
+                  'archived', 'archived_date')
 
 
 class TicketNoteSerializer(serializers.ModelSerializer):

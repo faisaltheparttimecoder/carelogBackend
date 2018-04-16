@@ -11,7 +11,10 @@ class Organisation(models.Model):
     created_at = models.DateField()
     location = models.CharField(max_length=20, default='')
     expired_contract = models.BooleanField(default=False)
+    country = models.CharField(max_length=100, null=False)
     recently_added = models.BooleanField(default=True)
+    archived = models.BooleanField(default=True)
+    archived_date = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('name',)
