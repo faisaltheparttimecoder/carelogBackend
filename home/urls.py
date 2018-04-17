@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
-from team import views
+from home import views
 
 urlpatterns = [
     # Api URL, for the main timeline page

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from team.models import BcsTeam
+from home.models import BcsTeam
 
 
 # Overriding the Django Default views.

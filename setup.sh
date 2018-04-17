@@ -9,7 +9,7 @@ mkdir -p tasks/migrations
 mkdir -p timeline/migrations
 mkdir -p zendesk/migrations
 mkdir -p environment/migrations
-mkdir -p team/migrations
+mkdir -p home/migrations
 
 # Create the folder a python executable
 touch core/migrations/__init__.py
@@ -20,7 +20,7 @@ touch tasks/migrations/__init__.py
 touch timeline/migrations/__init__.py
 touch zendesk/migrations/__init__.py
 touch environment/migrations/__init__.py
-touch team/migrations/__init__.py
+touch home/migrations/__init__.py
 
 # Setup the dev environment ( fill in the details below )
 {

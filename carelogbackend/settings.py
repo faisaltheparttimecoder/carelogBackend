@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'timeline.apps.TimelineConfig',
     'tasks.apps.TasksConfig',
     'environment.apps.EnvironmentConfig',
-    'team.apps.TeamConfig',
+    'home.apps.HomeConfig',
 
     # Auth apps
     'oauth2_provider',
@@ -115,18 +115,29 @@ DATABASES = {
     }
 }
 
+# Remove the authentication stuff for the API's if its on development mode
+if os.environ['ENVIRONMENT'] == 'prod':
+    REST_FRAMEWORK = {
+        'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+        'DEFAULT_PERMISSION_CLASSES': (
+            'rest_framework.permissions.IsAuthenticated',
+        ),
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+            'rest_framework_social_oauth2.authentication.SocialAuthentication',
+        ),
+    }
+else:
+    REST_FRAMEWORK = {
+        'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+            'rest_framework_social_oauth2.authentication.SocialAuthentication',
+        ),
+    }
 
-REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
-    ),
-}
 
+# Authentication backend
 AUTHENTICATION_BACKENDS = (
     # Google OAuth
     'social_core.backends.google.GoogleOAuth2',

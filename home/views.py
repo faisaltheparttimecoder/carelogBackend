@@ -2,8 +2,8 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from team.models import BcsTeam
-from team.serializers import BcsTeamSerializer
+from home.models import BcsTeam
+from home.serializers import BcsTeamSerializer
 
 
 class BcsTeamList(APIView):

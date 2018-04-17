@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from team.models import BcsTeam
+from home.models import BcsTeam
 
 
 class BcsTeamSerializer(serializers.ModelSerializer):
