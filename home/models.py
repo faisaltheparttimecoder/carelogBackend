@@ -24,3 +24,13 @@ class BcsTeam(models.Model):
         ordering = ('first_name',)
 
 
+class MainPage(models.Model):
+    """
+    Table: MainPage
+    Comment: Table that stores all the MainPage information.
+    """
+    page = models.CharField(max_length=30)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.page

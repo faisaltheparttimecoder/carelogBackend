@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from home.models import BcsTeam
+from home.models import BcsTeam, MainPage
 
 
 class BcsTeamSerializer(serializers.ModelSerializer):
@@ -25,4 +25,14 @@ class BcsTeamSerializer(serializers.ModelSerializer):
                   'slack_handler',
                   'accounts',
                   'location', 'bcsteam_org_name',)
+
+
+class MainPageSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the MainPage table
+    """
+
+    class Meta:
+        model = MainPage
+        fields = '__all__'
 
