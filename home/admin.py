@@ -36,3 +36,4 @@ class MainPageAdmin(admin.ModelAdmin):
 
 # Register all the tables on the Django website display
 admin.site.register(BcsTeam, BcsTeamAdmin)
+admin.site.register(MainPage, MainPageAdmin)
