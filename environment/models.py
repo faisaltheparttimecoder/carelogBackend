@@ -1,5 +1,6 @@
 from django.db import models
 from zendesk.models import Organisation
+from products.models import Product
 
 
 # Create your models here.
@@ -45,3 +46,59 @@ class EnvironmentNote(models.Model):
 
     def __str__(self):
         return str(self.org_id)
+
+
+class EnvironmentProductsList(models.Model):
+    """
+    Table: Environment Products List
+    Comment: The place to store all the Environment Products List
+    """
+    org_id = models.ForeignKey(Organisation, related_name='environment_product_list_org', on_delete=models.CASCADE, db_index=True)
+    products = models.ManyToManyField(Product, related_name='environment_product_list', blank=True)
+
+    def __str__(self):
+        return str(self.org_id)
+
+
+class EnvironmentType(models.Model):
+    """
+    Table: Environment Type
+    Comment: The place to store all the Environment Type
+    """
+    type = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return str(self.type)
+
+
+class EnvironmentInstance(models.Model):
+    """
+    Table: Environment Instance
+    Comment: The place to store all the Environment Instance
+    """
+    type_id = models.ForeignKey(EnvironmentType, related_name='environment_type', on_delete=models.CASCADE, db_index=True)
+    org_id = models.ForeignKey(Organisation, related_name='environment_instance_org', on_delete=models.CASCADE,
+                               db_index=True)
+    name = models.CharField(max_length=50)
+    infrastructure = models.CharField(max_length=50)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = (('org_id', 'name', 'infrastructure'),)
+
+    def __str__(self):
+        return str(self.name)
+
+
+class EnvironmentInstanceProduct(models.Model):
+    """
+    Table: Environment Instance
+    Comment: The place to store all the Environment Instance Product
+    """
+    instance_id = models.ForeignKey(EnvironmentInstance, related_name='environment_instance', on_delete=models.CASCADE,
+                                    db_index=True)
+    name = models.CharField(max_length=50)
+    version = models.CharField(max_length=50, blank=True)
+
+    def __str__(self):
+        return str(self.name)
