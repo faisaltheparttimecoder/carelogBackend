@@ -38,27 +38,46 @@ if ! [ -x "$(command -v cf)" ]; then
   exit 1
 fi
 
+# Terminate old process that is running on the port ( for eg.s if the backup failed last time )
+echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - Terminating old process if running on the port"
+netstat -nlp | grep ${local_port} | awk '{print $7}' | cut -d'/' -f1 | xargs -n1 /bin/kill 2> /dev/null
+
 # CF Command line arguments to login to cf
 echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - Login to PWS"
 `command -v cf` login -u ${username} -p `echo ${user_token} | openssl enc -aes-256-cbc -a -d -salt -pass pass:tecmint` -a ${api_url} -o ${org} -s ${space}
 
-# Install cf mysql plugin
-echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - Install Mysql / mysqldump plugin"
-`command -v cf` install-plugin -r "CF-Community" mysql-plugin -f
+# Skipping the below steps since we have now migrated from MySQL v1 to MySQL v2 which is has more disk space and
+# throughput (i.e v2 is dedicated instance )
 
-# Check if MySQL CF Plugin is installed is installed
-echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - Checking if the cf MySQLDump plugin is installed"
-mysql_plugin_installed=`\`command -v cf\` plugins | grep mysqldump | wc -l | tr -d ' '`
-if [ ${mysql_plugin_installed} -gt 0 ]; then
-    echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - cf MySQLDump plugin is installed, continue..."
-else
-    echo "`date +"%Y-%m-%d %H:%M:%S"`: ERROR - cf MySQLDump plugin is not installed, exiting..."
-    exit 1
-fi
+## Install cf mysql plugin
+#echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - Install Mysql / mysqldump plugin"
+#`command -v cf` install-plugin -r "CF-Community" mysql-plugin -f
+
+## Check if MySQL CF Plugin is installed is installed
+#echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - Checking if the cf MySQLDump plugin is installed"
+#mysql_plugin_installed=`\`command -v cf\` plugins | grep mysqldump | wc -l | tr -d ' '`
+#if [ ${mysql_plugin_installed} -gt 0 ]; then
+#    echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - cf MySQLDump plugin is installed, continue..."
+#else
+#    echo "`date +"%Y-%m-%d %H:%M:%S"`: ERROR - cf MySQLDump plugin is not installed, exiting..."
+#    exit 1
+#fi
+
+# Open a ssh tunnel for reading the data from the database.
+echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - Creating a SSH tunnel"
+`command -v cf` ssh -N -L ${local_port}:${source_host}:${source_port} ${app_name} &
+
+# Store the background process PID
+export tunnel_pid=$!
+
+# Sleep for 10 seconds for tunnel to establish
+echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - Sleeping for 10 seconds for ssh tunnel to establish"
+sleep 10
 
 # Everything is good, now time to execute the backup
-echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - Running cf MySQLDump to take the backup of the database: ${service_name}"
-`command -v cf` mysqldump ${service_name} > ${dump_file}
+echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - Running cf MySQLDump to take the backup of the database: ${db}"
+#`command -v cf` mysqldump ${service_name} > ${dump_file}
+mysqldump  -h ${local_host} --port=${local_port} --user="${dbusername}" --password="${dbpassword}" ${db} > ${dump_file}
 retcode=$?
 if [ ${retcode} -ne 0 ]; then
     export status_message="FAILURE"
@@ -97,9 +116,15 @@ if [ ${status_message} ==  "FAILURE" ]; then
 else
     export sql_query="insert into tasks_backuphistory (backup_date, backup_status, backup_file, backup_size)  values (now(), '${status_message}', '${dump_file}.gz', '${dump_size}')"
 fi
-echo ${sql_query} | `command -v cf` mysql ${service_name}
+#echo ${sql_query} | `command -v cf` mysql ${service_name}
+echo ${sql_query} | mysql -h ${local_host} --port=${local_port} --user="${dbusername}" --password="${dbpassword}" ${db}
 
-# Remove the configuration
+# Terminate the background process
+echo "`date +"%Y-%m-%d %H:%M:%S"`: INFO - Terminating the backup process"
+kill ${tunnel_pid} 2> /dev/null
+
+# Logout from CF and cleanup the files
+`command -v cf` logout
 rm -rf ${HOME}/.cf
 
 # Success message

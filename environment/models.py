@@ -97,8 +97,11 @@ class EnvironmentInstanceProduct(models.Model):
     """
     instance_id = models.ForeignKey(EnvironmentInstance, related_name='environment_instance', on_delete=models.CASCADE,
                                     db_index=True)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=200)
     version = models.CharField(max_length=50, blank=True)
+
+    class Meta:
+        ordering = ('name',)
 
     def __str__(self):
         return str(self.name)
