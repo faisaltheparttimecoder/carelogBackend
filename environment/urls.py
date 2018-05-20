@@ -29,6 +29,10 @@ urlpatterns = [
     url(r'^api/customer/environment/environment_instance/(?P<pk>[0-9]+)/$',
         views.EnvironmentInstanceDetails.as_view()),
 
+    # Api URL, for all the product list information
+    url(r'^api/customer/environment/environment_product_info/(?P<pk>[0-9]+)/$',
+        views.EnvironmentAllProductList.as_view()),
+
     # Api URL, for the main environment Instance Type page
     url(r'^api/customer/environment/environment_type/$', views.EnvironmentTypeList.as_view()),
 

@@ -7,6 +7,7 @@ from rest_framework import generics
 from django.http import Http404
 from environment.models import AccountInformation, ContactInformation, EnvironmentNote, EnvironmentProductsList
 from environment.models import EnvironmentInstance, EnvironmentInstanceProduct, EnvironmentType
+from products.models import Product
 from environment.serializers import AccountInformationSerializer, ContactInformationSerializer, EnvironmentNotesSerializer
 from environment.serializers import EnvironmentProductsListSerializer, EnvironmentInstanceProductSerializer, EnvironmentInstanceSerializer
 from environment.serializers import EnvironmentTypeSerializer
@@ -200,6 +201,24 @@ class EnvironmentNotesDetails(APIView):
         env_info = self.get_object(pk)
         env_info.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EnvironmentAllProductList(APIView):
+    """
+    This takes the union of product and instance table
+    and give a querated list of product of this org
+    """
+
+    def get(self, request, pk, format=None):
+        """
+        The default get method, i.e on page load
+        """
+        queryset1 = Product.objects.values('name').filter(
+            id__in=EnvironmentProductsList.objects.values('products').filter(org_id=pk)).distinct()
+        queryset2 = EnvironmentInstanceProduct.objects.values('name').filter(
+            instance_id__in=EnvironmentInstance.objects.values('id').filter(org_id=pk)).distinct()
+        union_query_set = queryset1.union(queryset2).order_by('name')
+        return Response(union_query_set)
 
 
 class EnvironmentProductsListList(generics.ListAPIView):

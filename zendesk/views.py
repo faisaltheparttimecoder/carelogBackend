@@ -6,9 +6,9 @@ from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 from django.http import Http404
 from common.utilities import get_url
-from zendesk.models import Organisation, TicketNote, HotTicket
-from zendesk.serializers import OrganisationSerializer, TicketNoteSerializer, HotTicketsSerializer
-from zendesk.lib.ticket_extractor import extract_hot_ticket
+from zendesk.models import Organisation, TicketNote, TicketAttribute
+from zendesk.serializers import OrganisationSerializer, TicketNoteSerializer, TicketAttributeSerializer
+from zendesk.lib.ticket_extractor import extract_ticket_attributes
 from zendesk.lib.map_request import method_mapper
 
 
@@ -46,7 +46,7 @@ class ZendeskSearch(APIView):
         search_api = os.environ['ZENDESK_BASE_URL'] + '/api/v2/search?' + search_string
         if search_string.startswith('query=type:ticket organization:'):
             zd_data = get_url(search_api, os.environ['ZENDESK_USERNAME'], os.environ['ZENDESK_PASSWORD'])
-            zd_data['hot_tickets'] = extract_hot_ticket(search_string)
+            zd_data['tickets_attributes'] = extract_ticket_attributes(search_string)
             return Response(zd_data)
         else:
             return Response(get_url(search_api, os.environ['ZENDESK_USERNAME'], os.environ['ZENDESK_PASSWORD']))
@@ -185,28 +185,34 @@ class TicketNoteDetails(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class HotTicketsList(generics.ListAPIView):
+class TicketAttributeList(generics.ListAPIView):
     """
     List all TicketNote, or create a new HotTicket.
     """
 
-    queryset = HotTicket.objects.all()
-    serializer_class = HotTicketsSerializer
+    queryset = TicketAttribute.objects.all()
+    serializer_class = TicketAttributeSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('ticket_id', 'org_id')
 
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         """
-        The default post method.
+        The default post method. The post method is somewhat different, here we use
+        update or insert method
         """
-        serializer = HotTicketsSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:  # if the ticket exists then update the attributes.
+            details = TicketAttributeDetails()
+            attr = details.get_object(pk=request.data['ticket_id'])
+            return details.put(request, attr)
+        except Http404:  # The object doesn't exists, so lets create it.
+            serializer = TicketAttributeSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class HotTicketDetails(APIView):
+class TicketAttributeDetails(APIView):
     """
     Retrieve, update or delete a HotTicket instance.
     """
@@ -216,14 +222,24 @@ class HotTicketDetails(APIView):
         Get the perticular row from the table.
         """
         try:
-            return HotTicket.objects.get(ticket_id=pk)
-        except HotTicket.DoesNotExist:
+            return TicketAttribute.objects.get(ticket_id=pk)
+        except TicketAttribute.DoesNotExist:
             raise Http404
+
+    def put(self, request, attr, format=None):
+        """
+        When requested update the corresponding entry of the table
+        """
+        serializer = TicketAttributeSerializer(attr, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         """
         When requested delete the corresponding entry of the table
         """
-        hot = self.get_object(pk)
-        hot.delete()
+        attr = self.get_object(pk)
+        attr.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

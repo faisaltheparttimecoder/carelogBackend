@@ -28,7 +28,7 @@ class EnvironmentNotesAdmin(admin.ModelAdmin):
     """
     Override the default Django Admin website display of EnvironmentNotes Admin app
     """
-    list_display = ["org_id", "title", "created", "updated",  "info"]
+    list_display = ["org_id", "title", "created", "updated",  "description"]
 
     class Meta:
         model = EnvironmentNote
@@ -58,7 +58,7 @@ class EnvironmentInstanceAdmin(admin.ModelAdmin):
     """
     Override the default Django Admin website display of EnvironmentInstance Admin app
     """
-    list_display = ["type_id", "org_id", "name", "infrastructure"]
+    list_display = ["type_id", "org_id", "name", "infrastructure", "timeline_id"]
 
     class Meta:
         model = EnvironmentInstance

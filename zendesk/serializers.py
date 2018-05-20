@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from zendesk.models import Organisation, HotTicket, TicketNote
+from zendesk.models import Organisation, TicketAttribute, TicketNote
 
 
 class OrganisationSerializer(serializers.ModelSerializer):
@@ -25,14 +25,15 @@ class TicketNoteSerializer(serializers.ModelSerializer):
         fields = ('id', 'ticket_id', 'org_id', 'author', 'created', 'notes')
 
 
-class HotTicketsSerializer(serializers.ModelSerializer):
+class TicketAttributeSerializer(serializers.ModelSerializer):
     """
-    Serializer for the HotTickets table
+    Serializer for the TicketAttributes table
     """
 
     class Meta:
-        model = HotTicket
-        fields = ('id', 'ticket_id', 'org_id', 'hot')
+        model = TicketAttribute
+        fields = ('id', 'ticket_id', 'org_id', 'hot', 'patch')
+
 
 
 

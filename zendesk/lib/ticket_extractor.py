@@ -1,5 +1,5 @@
 import copy
-from zendesk.models import HotTicket, Organisation
+from zendesk.models import TicketAttribute, Organisation
 from common.utilities import find_between
 from django.db import connection
 
@@ -71,12 +71,13 @@ def run_query(sql, by_month=False):
         return dict_fetch_all(cursor)
 
 
-def extract_hot_ticket(search_string):
+def extract_ticket_attributes(search_string):
     collector = {}
     org_id = find_between(search_string, 'organization:', ' updated')
-    hot_tickets = HotTicket.objects.filter(org_id=Organisation.objects.get(org_id=org_id))
-    for hot_ticket in hot_tickets:
-        collector['zd' + str(hot_ticket.org_id.id) + str(hot_ticket.ticket_id)] = hot_ticket.hot
+    ticket_attributes = TicketAttribute.objects.filter(org_id=Organisation.objects.get(org_id=org_id))
+    for attribute in ticket_attributes:
+        collector['zd' + str(attribute.org_id.id) + str(attribute.ticket_id) + 'hot'] = attribute.hot
+        collector['zd' + str(attribute.org_id.id) + str(attribute.ticket_id) + 'patch'] = attribute.patch
     return collector
 
 

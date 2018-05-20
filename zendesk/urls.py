@@ -25,8 +25,8 @@ urlpatterns = [
     url(r'^api/customer/ticketnotes/(?P<pk>[0-9]+)/$', views.TicketNoteDetails.as_view()),
 
     # Api URL, to load all the hot ticket
-    url(r'^api/customer/hottickets/$', views.HotTicketsList.as_view()),
-    url(r'^api/customer/hottickets/(?P<pk>[0-9]+)/$', views.HotTicketDetails.as_view()),
+    url(r'^api/customer/ticketattribute/$', views.TicketAttributeList.as_view()),
+    url(r'^api/customer/ticketattribute/(?P<pk>[0-9]+)/$', views.TicketAttributeDetails.as_view()),
 
     # Dashboard API
     url(r'^api/customer/tickets/(?P<method>[\w\-]+)/$', views.TicketViewSet.as_view()),

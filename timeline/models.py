@@ -10,7 +10,8 @@ class Timeline(models.Model):
     title = models.CharField(max_length=100, null=False)
     description = models.CharField(max_length=300, null=False)
     org_id = models.ForeignKey(Organisation, related_name='timeline_org', on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('title',)
@@ -45,7 +46,7 @@ class TimelineDetail(models.Model):
     category_id = models.ForeignKey(TimelineCategory, related_name='category', on_delete=models.CASCADE)
     created = models.DateTimeField(null=False)
     title = models.CharField(max_length=100, null=False)
-    description = models.CharField(max_length=700, null=False)
+    description = models.CharField(max_length=10000, null=False)
 
     class Meta:
         ordering = ('-created',)

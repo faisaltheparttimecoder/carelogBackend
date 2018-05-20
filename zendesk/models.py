@@ -65,14 +65,15 @@ class LastOrgTicketLoaderRun(models.Model):
         return str(self.org_id)
 
 
-class HotTicket(models.Model):
+class TicketAttribute(models.Model):
     """
-    Table: HotTickets
+    Table: TicketAttribute
     Comment: The place to store all the Hot Tickets
     """
     ticket_id = models.BigIntegerField(null=False, unique=True)
     org_id = models.ForeignKey(Organisation, related_name='hot_ticket_org', on_delete=models.CASCADE)
-    hot = models.BooleanField()
+    hot = models.BooleanField(default=False)
+    patch = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.ticket_id)

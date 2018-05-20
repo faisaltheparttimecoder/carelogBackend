@@ -1,5 +1,5 @@
 from django.contrib import admin
-from zendesk.models import Organisation, TicketNote, HotTicket, Ticket, LastOrgTicketLoaderRun
+from zendesk.models import Organisation, TicketNote, TicketAttribute, Ticket, LastOrgTicketLoaderRun
 
 
 # Overriding the Django Default views.
@@ -13,14 +13,14 @@ class OrganisationAdmin(admin.ModelAdmin):
         model = Organisation
 
 
-class HotTicketAdmin(admin.ModelAdmin):
+class TicketAttributeAdmin(admin.ModelAdmin):
     """
     Override the default Django Admin website display of Ticket Notes app
     """
-    list_display = ["ticket_id", "hot"]
+    list_display = ["ticket_id", "hot", "patch"]
 
     class Meta:
-        model = HotTicket
+        model = TicketAttribute
 
 
 class TicketNoteAdmin(admin.ModelAdmin):
@@ -56,7 +56,7 @@ class LastOrgTicketLoaderRunAdmin(admin.ModelAdmin):
 
 # Register all the tables on the Django website display
 admin.site.register(Organisation, OrganisationAdmin)
-admin.site.register(HotTicket, HotTicketAdmin)
+admin.site.register(TicketAttribute, TicketAttributeAdmin)
 admin.site.register(TicketNote, TicketNoteAdmin)
 admin.site.register(Ticket, TicketAdmin)
 admin.site.register(LastOrgTicketLoaderRun, LastOrgTicketLoaderRunAdmin)

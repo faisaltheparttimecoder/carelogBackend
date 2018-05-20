@@ -1,6 +1,7 @@
 from django.db import models
 from zendesk.models import Organisation
 from products.models import Product
+from timeline.models import Timeline
 
 
 # Create your models here.
@@ -39,7 +40,7 @@ class EnvironmentNote(models.Model):
     title = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    info = models.TextField(default="Add notes to this note section", blank=True)
+    description = models.TextField(default="Add notes to this note section", blank=True)
 
     class Meta:
         ordering = ('title',)
@@ -79,6 +80,8 @@ class EnvironmentInstance(models.Model):
     type_id = models.ForeignKey(EnvironmentType, related_name='environment_type', on_delete=models.CASCADE, db_index=True)
     org_id = models.ForeignKey(Organisation, related_name='environment_instance_org', on_delete=models.CASCADE,
                                db_index=True)
+    timeline_id = models.ForeignKey(Timeline, related_name='environment_timeline', on_delete=models.SET_NULL,
+                                    db_index=True, null=True)
     name = models.CharField(max_length=50)
     infrastructure = models.CharField(max_length=50)
     updated = models.DateTimeField(auto_now=True)

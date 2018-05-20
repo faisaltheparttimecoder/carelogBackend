@@ -81,6 +81,6 @@ class EnvironmentInstanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EnvironmentInstance
-        fields = ('id', 'type_id', 'org_id', 'name', 'infrastructure', 'updated',
+        fields = ('id', 'type_id', 'org_id', 'name', 'infrastructure', 'updated', 'timeline_id',
                   'environment_type', 'environment_instance')
 
