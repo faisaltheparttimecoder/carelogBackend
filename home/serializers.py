@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from home.models import BcsTeam, MainPage
+from home.models import BcsTeam, MainPage, Certification
 
 
 class BcsTeamSerializer(serializers.ModelSerializer):
@@ -36,3 +36,16 @@ class MainPageSerializer(serializers.ModelSerializer):
         model = MainPage
         fields = '__all__'
 
+
+class CertificationSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Certification table
+    """
+    bcs_team_achievement = serializers.SerializerMethodField('get_bcs_team', read_only=True)
+
+    def get_bcs_team(self, obj):
+        return obj.team_id.first_name + ' ' + obj.team_id.last_name
+
+    class Meta:
+        model = Certification
+        fields = ('id', 'team_id', 'certification', 'bcs_team_achievement',)

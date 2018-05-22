@@ -1,5 +1,5 @@
 from django.contrib import admin
-from home.models import BcsTeam, MainPage
+from home.models import BcsTeam, MainPage, Certification
 
 
 # Overriding the Django Default views.
@@ -34,6 +34,20 @@ class MainPageAdmin(admin.ModelAdmin):
         model = MainPage
 
 
+class CertificationAdmin(admin.ModelAdmin):
+    """
+    Override the default Django Admin website display of Achievement app
+    """
+    list_display = [
+        "team_id",
+        "certification",
+    ]
+
+    class Meta:
+        model = Certification
+
+
 # Register all the tables on the Django website display
 admin.site.register(BcsTeam, BcsTeamAdmin)
 admin.site.register(MainPage, MainPageAdmin)
+admin.site.register(Certification, CertificationAdmin)

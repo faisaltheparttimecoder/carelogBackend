@@ -29,8 +29,21 @@ class MainPage(models.Model):
     Table: MainPage
     Comment: Table that stores all the MainPage information.
     """
-    page = models.CharField(max_length=30)
+    page = models.CharField(max_length=30, db_index=True)
     content = models.TextField()
 
     def __str__(self):
         return self.page
+
+
+class Certification(models.Model):
+    """
+    Table: Achievement
+    Comment: Table that stores all the Certification information.
+    """
+    team_id = models.ForeignKey(BcsTeam, related_name='bcs_team_achievement',
+                                on_delete=models.CASCADE, db_index=True)
+    certification = models.CharField(max_length=300, null=False)
+
+    def __str__(self):
+        return str(self.team_id)
