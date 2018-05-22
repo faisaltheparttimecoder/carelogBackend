@@ -159,3 +159,46 @@ class CertificationList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CertificationDetails(APIView):
+    """
+    Retrieve, update or delete a Certification instance.
+    """
+
+    def get_object(self, pk):
+        """
+        Get the perticular row from the table.
+        """
+        try:
+            return Certification.objects.get(pk=pk)
+        except Certification.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        """
+        We are going to add the Certification content along with this pull request
+        """
+        certification = self.get_object(pk)
+        serializer = CertificationSerializer(certification)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        """
+        When requested update the corresponding entry of the table
+        """
+        certification = self.get_object(pk)
+        serializer = CertificationSerializer(certification, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        """
+        When requested delete the corresponding entry of the table
+        """
+        certification = self.get_object(pk)
+        certification.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
