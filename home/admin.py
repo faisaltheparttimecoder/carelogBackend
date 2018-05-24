@@ -1,5 +1,5 @@
 from django.contrib import admin
-from home.models import BcsTeam, MainPage, Certification
+from home.models import BcsTeam, MainPage, Certification, Feedback
 
 
 # Overriding the Django Default views.
@@ -47,7 +47,25 @@ class CertificationAdmin(admin.ModelAdmin):
         model = Certification
 
 
+class FeedbackAdmin(admin.ModelAdmin):
+    """
+    Override the default Django Admin website display of Feedback app
+    """
+    list_display = [
+        "receiver",
+        "sender",
+        "sender_title",
+        "sender_org",
+        "received_date",
+        "feedback"
+    ]
+
+    class Meta:
+        model = Feedback
+
+
 # Register all the tables on the Django website display
 admin.site.register(BcsTeam, BcsTeamAdmin)
 admin.site.register(MainPage, MainPageAdmin)
 admin.site.register(Certification, CertificationAdmin)
+admin.site.register(Feedback, FeedbackAdmin)

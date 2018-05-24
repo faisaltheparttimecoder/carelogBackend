@@ -14,6 +14,8 @@ urlpatterns = [
     # Api URL, for the achievement page
     url(r'^api/bcs/certification/$', views.CertificationList.as_view()),
     url(r'^api/bcs/certification/(?P<pk>[0-9]+)/$', views.CertificationDetails.as_view()),
+    url(r'^api/bcs/feedback/$', views.FeedbackList.as_view()),
+    url(r'^api/bcs/feedback/(?P<pk>[0-9]+)/$', views.FeedbackDetails.as_view()),
 
 ]
 

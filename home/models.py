@@ -47,3 +47,23 @@ class Certification(models.Model):
 
     def __str__(self):
         return str(self.team_id)
+
+
+class Feedback(models.Model):
+    """
+    Table: Feedback
+    Comment: Table that stores all the Feedback information.
+    """
+
+    receiver = models.CharField(max_length=200, null=False)
+    sender = models.CharField(max_length=100, null=False)
+    sender_title = models.CharField(max_length=100, null=True, blank=True)
+    sender_org = models.CharField(max_length=100, null=True, blank=True)
+    received_date = models.DateTimeField(null=False)
+    feedback = models.CharField(max_length=5000, null=False)
+
+    def __str__(self):
+        return str(self.receiver)
+
+    class Meta:
+        ordering = ('-received_date',)
