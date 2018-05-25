@@ -2,6 +2,7 @@
 # Make all the migration folder
 mkdir -p core/migrations
 mkdir -p links/migrations
+mkdir -p resources/migrations
 mkdir -p products/migrations
 mkdir -p security/migrations
 mkdir -p tasks/migrations
@@ -13,6 +14,7 @@ mkdir -p home/migrations
 # Create the folder a python executable
 touch core/migrations/__init__.py
 touch links/migrations/__init__.py
+touch resources/migrations/__init__.py
 touch products/migrations/__init__.py
 touch security/migrations/__init__.py
 touch tasks/migrations/__init__.py
@@ -34,6 +36,8 @@ python manage.py makemigrations products
 python manage.py migrate products
 python manage.py makemigrations links
 python manage.py migrate links
+python manage.py makemigrations resources
+python manage.py migrate resources
 python manage.py makemigrations environment
 python manage.py migrate environment
 python manage.py makemigrations home

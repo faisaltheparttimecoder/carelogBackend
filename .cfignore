@@ -8,6 +8,7 @@ carelogbackend/static
 # Ignore migration folders
 core/migrations
 links/migrations
+resources/migrations
 products/migrations
 security/migrations
 tasks/migrations

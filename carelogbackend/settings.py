@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'security.apps.SecurityConfig',
     'products.apps.ProductsConfig',
     'links.apps.LinksConfig',
+    'resources.apps.ResourcesConfig',
     'zendesk.apps.ZendeskConfig',
     'timeline.apps.TimelineConfig',
     'tasks.apps.TasksConfig',

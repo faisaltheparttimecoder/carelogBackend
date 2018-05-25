@@ -1,10 +1,9 @@
-from links.models import Category, Link
-from links.serializers import CategorySerializer, LinksSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
+from links.models import Category, Link
+from links.serializers import CategorySerializer, LinksSerializer
 
 class CategoryList(APIView):
     """

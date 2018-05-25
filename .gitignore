@@ -127,6 +127,7 @@ security/migrations
 core/migrations
 products/migrations
 links/migrations
+resources/migrations
 zendesk/migrations
 timeline/migrations
 tasks/migrations
